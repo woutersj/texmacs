@@ -1016,7 +1016,7 @@
       (with u (url-relative current-save-source (unix->url (car l)))
 	(if (not (url-exists? u)) '()
 	    (with-global current-save-source u
-	      (with t (tree-inclusion u)
+	      (with t (html-expand (tree-inclusion u))
 		(tmhtml (tm->stree t))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
