@@ -161,7 +161,7 @@ box_widget_rep::handle_repaint (renderer ren, SI x1, SI y1, SI x2, SI y2) {
 widget
 box_widget (box b, bool tr) {
   color col= light_grey;
-  return widget (tm_new<box_widget_rep> (b, col, tr, 5/6.0, 3*PIXEL, 3*PIXEL));
+  return widget (tm_new<box_widget_rep> (b, col, tr, retina_zoom*5/6.0, 3*PIXEL, 3*PIXEL));
 }
 
 widget
