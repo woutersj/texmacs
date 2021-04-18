@@ -99,8 +99,8 @@ public:
    */
   virtual QList<QPair<QString,QString> > availablePrinters() = 0;
   
-  static QString qtPaperSizeToQString(const QPrinter::PaperSize);
-  static QPrinter::PaperSize qStringToQtPaperSize(const QString&);
+    static QString qtPaperSizeToQString(const QPrinter::PaperSize);
+    static QPrinter::PaperSize qStringToQtPaperSize(const QString&);
 
 signals:
   void doneReading();

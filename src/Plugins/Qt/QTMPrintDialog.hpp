@@ -26,7 +26,6 @@
 #include <QtCore/QLocale>
 #include <QtCore/QVariant>
 #if (QT_VERSION >= 0x050000)
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
