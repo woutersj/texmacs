@@ -43,8 +43,9 @@ void
 QTMPrinterSettings::getFromQPrinter(const QPrinter& from) {
   printerName   = from.printerName ();
   fileName      = from.outputFileName ();
-  orientation   = (from.orientation() == QPrinter::Landscape)
-                  ? Landscape : Portrait;
+  //orientation   = (from.orientation() == QPrinter::Landscape)
+  //                ? Landscape : Portrait;
+  orientation = Landscape;
   paperSize     = "A4";
   dpi           = from.resolution ();
   firstPage     = from.fromPage ();
@@ -65,10 +66,10 @@ void
 QTMPrinterSettings::setToQPrinter(QPrinter& to) const {
   to.setResolution(dpi);
   to.setFromTo(firstPage, lastPage);
-  to.setOrientation((orientation == Landscape) ?
-                    QPrinter::Landscape : QPrinter::Portrait);
+  //to.setOrientation((orientation == Landscape) ?
+  //                  QPrinter::Landscape : QPrinter::Portrait);
   to.setOutputFileName(fileName);
-  to.setPageSize(QPageSize::A4);
+  //to.setPageSize(QPageSize::A4);
 #if (QT_VERSION >= 0x040700)
   to.setCopyCount(copyCount);
 #endif
@@ -125,19 +126,19 @@ QTMPrinterSettings::getChoices(DriverChoices _which, int& _default) {
   QStringList _ret;
   switch (_which) {
     case PageSize:
-      _ret = printerOptions["PageSize"].split(" ", QString::SkipEmptyParts);
+      _ret = printerOptions["PageSize"].split(" ", Qt::SkipEmptyParts);
       break;
     case Resolution:
-      _ret = printerOptions["Resolution"].split(" ", QString::SkipEmptyParts);
+      _ret = printerOptions["Resolution"].split(" ", Qt::SkipEmptyParts);
       break;
     case Duplex:
-      _ret = printerOptions["Duplex"].split(" ", QString::SkipEmptyParts);
+      _ret = printerOptions["Duplex"].split(" ", Qt::SkipEmptyParts);
       break;
     case ColorModel:
-      _ret = printerOptions["ColorModel"].split(" ", QString::SkipEmptyParts);
+      _ret = printerOptions["ColorModel"].split(" ", Qt::SkipEmptyParts);
       break;
     case Collate:
-      _ret = printerOptions["Collate"].split(" ", QString::SkipEmptyParts);
+      _ret = printerOptions["Collate"].split(" ", Qt::SkipEmptyParts);
       break;
   }
 
