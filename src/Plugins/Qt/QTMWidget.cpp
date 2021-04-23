@@ -455,7 +455,7 @@ mouse_state (QMouseEvent* event, bool flag) {
   Qt::KeyboardModifiers kstate= event->modifiers ();
   if (flag) bstate= bstate | tstate;
   if ((bstate & Qt::LeftButton     ) != 0) i += 1;
-//  if ((bstate & Qt::MidButton      ) != 0) i += 2;
+  if ((bstate & Qt::MiddleButton      ) != 0) i += 2;
   if ((bstate & Qt::RightButton    ) != 0) i += 4;
   if ((bstate & Qt::XButton1       ) != 0) i += 8;
   if ((bstate & Qt::XButton2       ) != 0) i += 16;
@@ -588,10 +588,10 @@ QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
 QVariant 
 QTMWidget::inputMethodQuery (Qt::InputMethodQuery query) const {
   switch (query) {
-//    case Qt::ImMicroFocus : {
-//      const QPoint &topleft= cursor_pos - tm_widget()->backing_pos + surface()->geometry().topLeft();
-//      return QVariant (QRect (topleft, QSize (5, 5)));
-//    }
+    case Qt::ImCursorRectangle : {
+      const QPoint &topleft= cursor_pos - tm_widget()->backing_pos + surface()->geometry().topLeft();
+      return QVariant (QRect (topleft, QSize (5, 5)));
+    }
     default:
       return QWidget::inputMethodQuery (query);
   }
@@ -641,7 +641,7 @@ tablet_state (QTabletEvent* event, bool flag) {
   Qt::MouseButton  tstate= event->button ();
   if (flag) bstate= bstate | tstate;
   if ((bstate & Qt::LeftButton     ) != 0) i += 1;
-//  if ((bstate & Qt::MidButton      ) != 0) i += 2;
+  if ((bstate & Qt::MiddleButton      ) != 0) i += 2;
   if ((bstate & Qt::RightButton    ) != 0) i += 4;
   if ((bstate & Qt::XButton1       ) != 0) i += 8;
   if ((bstate & Qt::XButton2       ) != 0) i += 16;
