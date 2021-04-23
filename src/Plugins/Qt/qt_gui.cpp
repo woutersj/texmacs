@@ -192,10 +192,10 @@ needing_update (false)
 /* important routines */
 void
 qt_gui_rep::get_extents (SI& width, SI& height) {
-  coord2 size = from_qsize (QScreen::size())
+  coord2 size = from_qsize (QApplication::primaryScreen()->size())
   //coord2 size = from_qsize (QApplication::desktop()->size());
-  //width  = size.x1;
-  //height = size.x2;
+  width  = size.x1;
+  height = size.x2;
 }
 
 void
