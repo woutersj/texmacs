@@ -207,7 +207,7 @@ void
 qt_chooser_widget_rep::perform_dialog () {
   QString caption = to_qstring (win_title);
   c_string tmp (directory * "/" * file);
-  //QString path = QString::fromUtf8 (tmp);
+  QString path = QString::fromUtf8 (tmp,-1);
   
 #if (defined(Q_OS_MAC) )// || defined(Q_WS_WIN)) //at least windows Xp and 7 lack image preview, switch to custom dialog
   QFileDialog* dialog = new QFileDialog (NULL, caption, path);
@@ -215,8 +215,8 @@ qt_chooser_widget_rep::perform_dialog () {
   QTMFileDialog*  dialog;
   QTMImageDialog* imgdialog = 0; // to avoid a dynamic_cast
   
-//  if (type == "image")
-//    dialog = imgdialog = new QTMImageDialog (NULL, caption, path);
+  if (type == "image")
+    dialog = imgdialog = new QTMImageDialog (NULL, caption, path);
 //  else
 //    dialog = new QTMFileDialog (NULL, caption, path);
 #endif
