@@ -249,13 +249,14 @@ QTMWidget::paintEvent (QPaintEvent* event) {
   //QVector<QRect> rects = event->region().rects();
   //for (int i = 0; i < rects.count(); ++i) {
   //  QRect qr = rects.at (i);
-  //  p.drawPixmap (QRect (qr.x(), qr.y(), qr.width(), qr.height()),
-  //                tm_widget()->backingPixmap,
-  //                QRect (retina_factor * qr.x(),
-  //                      retina_factor * qr.y(),
-  //                       retina_factor * qr.width(),
-  //                       retina_factor * qr.height()));
-  //}
+  for (qr = event->region().begin(); qr != event->region().end(); qr++)
+   p.drawPixmap (QRect (qr.x(), qr.y(), qr.width(), qr.height()),
+                 tm_widget()->backingPixmap,
+                 QRect (retina_factor * qr.x(),
+                       retina_factor * qr.y(),
+                        retina_factor * qr.width(),
+                        retina_factor * qr.height()));
+  }
 }
 
 void
