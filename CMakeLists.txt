@@ -572,13 +572,10 @@ if (TEXMACS_GUI MATCHES "Qt.*")
       ${QT_INCLUDE_DIR}
     )
     include (${QT_USE_FILE})
-  else (TEXMACS_GUI STREQUAL "Qt4")
-    # Homebrew installs Qt5 in /usr/local/opt/qt5
-    if (APPLE AND EXISTS /usr/local/opt/qt5)
-      list (APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
-    endif()
+  elseif (TEXMACS_GUI STREQUAL "Qt6")
     find_package (Qt6 COMPONENTS Core Gui Widgets PrintSupport Core5Compat REQUIRED)
     set (QT_LIBRARIES Qt6::Core Qt6::Gui Qt6::Widgets Qt6::PrintSupport Qt6::Core5Compat)
+  
     set (TeXmacs_Include_Dirs
       ${TeXmacs_Include_Dirs}
       ${Qt6Core_INCLUDE_DIRS}
@@ -590,6 +587,28 @@ if (TEXMACS_GUI MATCHES "Qt.*")
     if (Qt6_POSITION_INDEPENDENT_CODE)
       set (CMAKE_POSITION_INDEPENDENT_CODE ON)
     endif (Qt6_POSITION_INDEPENDENT_CODE)
+    if (APPLE)
+      add_definitions ("-DQ_WS_MAC")
+    endif (APPLE)
+  else (TEXMACS_GUI STREQUAL "Qt4")
+    # Homebrew installs Qt5 in /usr/local/opt/qt5
+    if (APPLE AND EXISTS /usr/local/opt/qt5)
+      list (APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
+    endif()
+    
+    find_package (Qt5 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
+    set (QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
+    
+    set (TeXmacs_Include_Dirs
+      ${TeXmacs_Include_Dirs}
+      ${Qt5Core_INCLUDE_DIRS}
+      ${Qt5Gui_INCLUDE_DIRS}
+      ${Qt5Widgets_INCLUDE_DIRS}
+      ${Qt5PrintSupport_INCLUDE_DIRS}
+    )
+    if (Qt5_POSITION_INDEPENDENT_CODE)
+      set (CMAKE_POSITION_INDEPENDENT_CODE ON)
+    endif (Qt5_POSITION_INDEPENDENT_CODE)
     if (APPLE)
       add_definitions ("-DQ_WS_MAC")
     endif (APPLE)
