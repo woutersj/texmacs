@@ -123,11 +123,19 @@ sub_str (string s, int i, int len, bool utf8) {
   // i: start (index is encoding-dependent, i.e. it is not a number of characters)
   // len: length in characters (encoding-independent)
   int j=i, k=0;
-  while (k < len) {
+  for (k = 0; k < len; k++) {
       goto_next_char (s, j, utf8);
-      k++;
   }
   return s (i, j);
+}
+
+int
+str_ind (string s, int ind, bool utf8) {
+  int i=0, k;
+  for (k=0; k<ind; k++) {
+      goto_next_char (s, i, utf8);
+  }
+  return i;
 }
 
 int
@@ -177,7 +185,9 @@ get_hyphens (string s,
     array<int> T (str_length (s, utf8)+1);
     for (i=0; i<N(T); i++) T[i]=0;
     for (len=1; len < MAX_SEARCH; len++)
-      for (i=0, l=0; i<N(s) - len + 1; goto_next_char (s, i, utf8), l++) {
+      for (i=0, l=0;
+          i<str_ind (s, str_length (s, utf8)-len+1, utf8);
+          goto_next_char (s, i, utf8), l++) {
         string r= patterns [s (i, i+len)];
         if (!(r == "?")) {
           // cout << "  " << s (i, i+len) << " => " << r << "\n";
