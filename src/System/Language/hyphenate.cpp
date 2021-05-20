@@ -118,6 +118,18 @@ goto_next_char (string s, int &i, bool utf8) {
   }
 }
 
+string
+sub_str (string s, int i, int len, bool utf8) {
+  // i: start (index is encoding-dependent, i.e. it is not a number of characters)
+  // len: length in characters (encoding-independent)
+  int j=i, k=0;
+  while (k < len) {
+      goto_next_char (s, j, utf8);
+      k++;
+  }
+  return s (i, j);
+}
+
 int
 str_length (string s, bool utf8) {
   if (utf8) {
