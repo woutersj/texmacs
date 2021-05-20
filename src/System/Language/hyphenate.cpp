@@ -243,9 +243,9 @@ get_hyphens (string s,
       for (i=0, l=0;
           i<str_ind (s, str_length (s, utf8)-len+1, utf8);
           goto_next_char (s, i, utf8), l++) {
-        string r= patterns [s (i, i+len)];
+        string r= patterns [sub_str (s, i, len, utf8)];
         if (!(r == "?")) {
-          // cout << "  " << s (i, i+len) << " => " << r << "\n";
+          // cout << "  " << sub_str (s, i, len, utf8) << " => " << r << "\n";
           for (j=0, k=0; j<=len; j++, goto_next_char (r, k, utf8)) {
             if (k<N(r) && is_digit (r[k])) {
               m= ((int) r[k])-((int) '0');
