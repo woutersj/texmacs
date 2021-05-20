@@ -232,7 +232,7 @@ get_hyphens (string s,
     array<int> T (N(s)+1);
     for (i=0; i<N(T); i++) T[i]=0;
     for (len=1; len < MAX_SEARCH; len++)
-      for (i=0, l=0; i<N(s) - len; goto_next_char (s, i, utf8), l++) {
+      for (i=0, l=0; i<N(s) - len + 1; goto_next_char (s, i, utf8), l++) {
         string r= patterns [s (i, i+len)];
         if (!(r == "?")) {
           // cout << "  " << s (i, i+len) << " => " << r << "\n";
