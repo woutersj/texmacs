@@ -169,10 +169,10 @@ get_hyphens (string s,
         string r= patterns [s (i, i+len)];
         if (!(r == "?")) {
           // cout << "  " << s (i, i+len) << " => " << r << "\n";
-          for (j=0, k=0; j<=len; j++, k++) {
+          for (j=0, k=0; j<=len; j++, goto_next_char (r, k, utf8)) {
             if (k<N(r) && is_digit (r[k])) {
               m= ((int) r[k])-((int) '0');
-              k++;
+              goto_next_char (r, k, utf8);
             }
             else m=0;
             if (m>T[l+j]) T[l+j]=m;
