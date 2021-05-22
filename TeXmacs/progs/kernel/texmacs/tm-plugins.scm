@@ -167,7 +167,7 @@
                (launcher-list)
                (ahash-table->list connection-session)
                (ahash-table->list connection-scripts)
-               (url->system (string->url "$TEXMACS_PATH")
+               (url->system (string->url "$TEXMACS_PATH"))
                (url->system (string->url "$TEXMACS_HOME_PATH"))))
   (display "\n"))
 
@@ -564,4 +564,4 @@
 	(for-each plugin-initialize (map car l))
 	(set! plugin-initialize-done? #t)
 	#t)))
-
+
