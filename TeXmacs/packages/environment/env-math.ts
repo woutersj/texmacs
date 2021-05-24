@@ -54,7 +54,9 @@
     </src-comment>
   </active*>
 
-  <assign|next-number|<macro|<style-with|src-compact|none|<next-equation><with|mode|text|font-shape|right|(<the-equation>)>>>>
+  <assign|bind-render-label|<macro|lab|<set-binding|<arg|lab>><render-label|<arg|lab>>>>
+
+  <assign|next-number|<macro|<style-with|src-compact|none|<inc-label-counter><compound|bind-render-label|<make-label>>>>>
 
   <drd-props|next-number|syntax|<macro|>>
 
@@ -69,6 +71,10 @@
   <assign|no-number|<macro|>>
 
   <assign|eqref|<macro|id|(<reference|<arg|id>>)>>
+
+  <assign|inc-label-counter|<value|next-equation>>
+
+  <assign|make-label|<value|the-equation>>
 
   <\active*>
     <\src-comment>
@@ -202,9 +208,7 @@
     <eqsplit*|<tformat|<arg|body>>>
   </macro>>
 
-  <assign|subequations|<\macro|body>
-    <arg|body>
-  </macro>>
+  <assign|subequations|<macro|body|<surround|<inc-label-counter><new-counter|subequation>||<with|inc-label-counter|<value|next-subequation>|make-label|<macro|<the-equation><number|<the-subequation>|alpha>>|<arg|body>>>>>
 
   <\active*>
     <\src-comment>
