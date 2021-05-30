@@ -20,7 +20,7 @@
 ******************************************************************************/
 
 struct text_language_rep: language_rep {
-  hashmap<string,string> patterns;
+  hashmap<string,list<array<int>>> patterns;
   hashmap<string,string> hyphenations;
 
   text_language_rep (string lan_name, string hyph_name);
@@ -30,7 +30,7 @@ struct text_language_rep: language_rep {
 };
 
 text_language_rep::text_language_rep (string lan_name, string hyph_name):
-  language_rep (lan_name), patterns ("?"), hyphenations ("?") {
+  language_rep (lan_name), patterns (array<int>(-1,-1)), hyphenations ("?") {
     load_hyphen_tables (hyph_name, patterns, hyphenations, true); }
 
 text_property
@@ -103,7 +103,7 @@ text_language_rep::hyphenate (
 ******************************************************************************/
 
 struct french_language_rep: language_rep {
-  hashmap<string,string> patterns;
+  hashmap<string,list<array<int>>> patterns;
   hashmap<string,string> hyphenations;
 
   french_language_rep (string lan_name, string hyph_name);
@@ -113,7 +113,7 @@ struct french_language_rep: language_rep {
 };
 
 french_language_rep::french_language_rep (string lan_name, string hyph_name):
-  language_rep (lan_name), patterns ("?"), hyphenations ("?") {
+  language_rep (lan_name), patterns (array<int>(-1,-1)), hyphenations ("?") {
     load_hyphen_tables (hyph_name, patterns, hyphenations, true); }
 
 inline bool
@@ -201,7 +201,7 @@ french_language_rep::hyphenate (
 ******************************************************************************/
 
 struct ucs_text_language_rep: language_rep {
-  hashmap<string,string> patterns;
+  hashmap<string,list<array<int>>> patterns;
   hashmap<string,string> hyphenations;
 
   ucs_text_language_rep (string lan_name, string hyph_name);
@@ -212,8 +212,8 @@ struct ucs_text_language_rep: language_rep {
 };
 
 ucs_text_language_rep::ucs_text_language_rep (string lan_name, string hyph_name):
-  language_rep (lan_name), patterns ("?"), hyphenations ("?")
-  { load_hyphen_tables (hyph_name, patterns, hyphenations, false); }
+  language_rep (lan_name), patterns (array<int>(-1,-1)), hyphenations ("?")
+  { load_hyphen_tables (hyph_name, patterns, hyphenations, true); }
 
 text_property
 ucs_text_language_rep::advance (tree t, int& pos) {
@@ -272,7 +272,7 @@ ucs_text_language_rep::advance (tree t, int& pos) {
 
 array<int>
 ucs_text_language_rep::get_hyphens (string s) {
-  return ::get_hyphens (s, patterns, hyphenations, true);
+  return ::get_hyphens (s, patterns, hyphenations, false);
 }
 
 void

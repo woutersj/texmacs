@@ -71,9 +71,27 @@ hyphen_normalize (string s) {
   return r;
 }
 
+list<array<int>>
+// void
+hyphen_to_array (string s){
+  cout << "s: " << s << "\n";
+  list<array<int>> h;
+  int i, j;
+  for (i=0,j=0; i<N(s); j++,goto_next_char(s,i,false)) {
+    if (is_digit (s[i])) {
+      array<int> p(2);
+      p[0] = j - N(h);
+      p[1] = ((int) s[i])-((int) '0');
+      h << p;
+    }
+  }
+  cout << "h: " << h << "\n";
+  return h;
+}
+
 void
 load_hyphen_tables (string file_name,
-                    hashmap<string,string>& patterns,
+                    hashmap<string,list<array<int>>>& patterns,
                     hashmap<string,string>& hyphenations, bool toCork) {
   string s;
   file_name= string ("hyphen.") * file_name;
@@ -101,7 +119,7 @@ load_hyphen_tables (string file_name,
     }
     if (pattern_flag && i != 0 && N(buffer) != 0) {
       string norm= hyphen_normalize (buffer);
-      patterns (unpattern (norm, !toCork))= norm;
+      patterns (unpattern (norm, !toCork))= hyphen_to_array (norm);
       //cout << buffer << " ==> " << unpattern (norm, !toCork) << " ==> " << norm << "\n";
     }
     if (hyphenation_flag && i != 0 && N(buffer) != 0) {
@@ -117,7 +135,7 @@ load_hyphen_tables (string file_name,
 
 array<int>
 get_hyphens (string s,
-             hashmap<string,string> patterns,
+             hashmap<string,list<array<int>>> patterns,
              hashmap<string,string> hyphenations) {
   return get_hyphens (s, patterns, hyphenations, false);
 }
@@ -140,42 +158,24 @@ str_ind (string s, int ind, bool utf8) {
   return i;
 }
 
-string
-sub_str (string s, int i, int len, bool utf8) {
-  // i: start (index is encoding-dependent, i.e. it is not a number of characters)
-  // len: length in characters (encoding-independent)
-  int j=i, k=0;
-  for (k = 0; k < len; k++) {
-      goto_next_char (s, j, utf8);
-  }
-  return s (i, j);
-}
-
-int
-str_ind (string s, int ind, bool utf8) {
-  int i=0, k;
-  for (k=0; k<ind; k++) {
-      goto_next_char (s, i, utf8);
-  }
-  return i;
-}
 
 int
 str_length (string s, bool utf8) {
-  if (utf8) {
+  // if (utf8) {
     int i=0, r=0;
     while (i < N(s)) {
-      decode_from_utf8 (s, i);
+      // decode_from_utf8 (s, i);
+      goto_next_char (s, i, utf8);
       r++;
     }
     return r;
-  }
-  else return N(s);
+  // }
+  // else return N(s);
 }
 
 array<int>
 get_hyphens (string s,
-             hashmap<string,string> patterns,
+             hashmap<string,list<array<int>>> patterns,
              hashmap<string,string> hyphenations, bool utf8) {
   ASSERT (N(s) != 0, "hyphenation of empty string");
 
@@ -237,23 +237,29 @@ get_hyphens (string s,
     s= "." * s * ".";
     // cout << s << "\n";
     int i, j, k, l, m, len;
-    array<int> T (N(s)+1);
+    int slen = str_length (s, utf8);
+    array<int> T (slen+1);
     for (i=0; i<N(T); i++) T[i]=0;
     for (len=1; len < MAX_SEARCH; len++)
       for (i=0, l=0;
-          i<str_ind (s, str_length (s, utf8)-len+1, utf8);
+          i<str_ind (s, slen-len+1, utf8);
           goto_next_char (s, i, utf8), l++) {
-        string r= patterns [sub_str (s, i, len, utf8)];
-        if (!(r == "?")) {
-          // cout << "  " << sub_str (s, i, len, utf8) << " => " << r << "\n";
-          for (j=0, k=0; j<=len; j++, goto_next_char (r, k, utf8)) {
-            if (k<N(r) && is_digit (r[k])) {
-              m= ((int) r[k])-((int) '0');
-              goto_next_char (r, k, utf8);
-            }
-            else m=0;
-            if (m>T[l+j]) T[l+j]=m;
-          }
+          // list<array<int>> r= patterns [sub_str (s, i, len, utf8)];
+          list<array<int>> r= patterns ["blah"];
+          if (!(r[0][0] == -1)) {
+           // cout << "  " << sub_str (s, i, len, utf8) << " => " << r << "\n";
+           for (j=0; j<N(r); j++) {
+             if (r[j][1]>T[l+r[j][0]]) T[l+r[j][0]]=r[j][1];
+           }
+
+    //     //   for (j=0, k=0; j<=len; j++, goto_next_char (r, k, utf8)) {
+    //     //     if (k<N(r) && is_digit (r[k])) {
+    //     //       m= ((int) r[k])-((int) '0');
+    //     //       goto_next_char (r, k, utf8);
+    //     //     }
+    //     //     else m=0;
+    //     //     if (m>T[l+j]) T[l+j]=m;
+    //     //   }
         }
       }
 

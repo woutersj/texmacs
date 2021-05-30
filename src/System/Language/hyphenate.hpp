@@ -14,13 +14,13 @@
 #include "language.hpp"
 
 void load_hyphen_tables (string language_name,
-                         hashmap<string,string>& patterns,
+                         hashmap<string,list<array<int>>>& patterns,
                          hashmap<string,string>& hyphenations, bool toCork);
 array<int> get_hyphens (string s,
-                        hashmap<string,string> patterns,
+                        hashmap<string,list<array<int>>> patterns,
                         hashmap<string,string> hyphenations);
 array<int> get_hyphens (string s,
-                        hashmap<string,string> patterns,
+                        hashmap<string,list<array<int>>> patterns,
                         hashmap<string,string> hyphenations, bool utf8);
 void std_hyphenate (string s, int after, string& left, string& right, int pen);
 void std_hyphenate (string s, int after, string& left, string& right, int pen,
