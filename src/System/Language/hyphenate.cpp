@@ -240,9 +240,10 @@ get_hyphens (string s,
     int slen = str_length (s, utf8);
     array<int> T (slen+1);
     for (i=0; i<N(T); i++) T[i]=0;
-    for (len=1; len < MAX_SEARCH; len++)
+    for (len=1; len < MAX_SEARCH; len++) {
+      int maxi = str_ind (s, slen-len+1, utf8);
       for (i=0, l=0;
-          i<str_ind (s, slen-len+1, utf8);
+          i<maxi;
           goto_next_char (s, i, utf8), l++) {
           // list<array<int>> r= patterns [sub_str (s, i, len, utf8)];
           list<array<int>> r= patterns ["blah"];
@@ -262,6 +263,7 @@ get_hyphens (string s,
     //     //   }
         }
       }
+    }
 
     array<int> penalty (N(T)-4);
     for (i=2; i < N(T)-4; i++)
