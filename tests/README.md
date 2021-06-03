@@ -8,7 +8,9 @@ or launch a Scheme session and then run `(run-all-tests)`.
 
 ## Guide to Run Unit Tests for cpp
 
-First, compile the whole project.
+First, download Google Test from [https://github.com/google/googletest/releases] and copy the subdirectory `google-test` to `tests\gtest`
+
+Then, compile the whole project. If `tests\gtest` is properly installed, CMake will detect it and build all test `cpp` files in the `test` directory.
 ```
 cd texmacs/
 mkdir build/ && cd build/
