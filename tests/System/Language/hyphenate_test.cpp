@@ -68,7 +68,7 @@ TEST (text_language, get_hyphens) {
   test_hyphens (lan,utf8_to_cork("известными"), utf8_to_cork("из-вест-ны-ми"));
   test_hyphens (lan,utf8_to_cork("согласно"), utf8_to_cork("со-глас-но"));
   test_hyphens (lan,utf8_to_cork("семиугольных"), utf8_to_cork("се-ми-уголь-ных"));
-}
+  }
   
   lan = text_language ("english");
   for (int k=0;k<repeats;k++){
@@ -86,5 +86,5 @@ TEST (text_language, get_hyphens) {
   test_hyphens (lan,string("office"), string("of-fice"));
   test_hyphens (lan,string("supercalifragilisticexpialidocious"),
                 string("su-per-cal-ifrag-ilis-tic-ex-pi-ali-do-cious"));
-              }
+  }
 }
