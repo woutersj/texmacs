@@ -74,7 +74,7 @@ hyphen_normalize (string s) {
 list<array<int>>
 // void
 hyphen_to_array (string s){
-  cout << "s: " << s << "\n";
+  // cout << "s: " << s << "\n";
   list<array<int>> h;
   int i, j;
   for (i=0,j=0; i<N(s); j++,goto_next_char(s,i,false)) {
@@ -85,7 +85,7 @@ hyphen_to_array (string s){
       h << p;
     }
   }
-  cout << "h: " << h << "\n";
+  // cout << "h: " << h << "\n";
   return h;
 }
 
@@ -179,6 +179,13 @@ get_hyphens (string s,
              hashmap<string,string> hyphenations, bool utf8) {
   ASSERT (N(s) != 0, "hyphenation of empty string");
 
+  if (str_length(s, utf8) < 5)  {
+    // cout << str_length(s, utf8) << LF;
+    array<int> penalty (str_length(s, utf8)-1);
+    for (int i=0; i < str_length(s, utf8)-1; i++) penalty [i] = HYPH_INVALID;
+    return penalty;
+  }
+
   if (utf8) s= cork_to_utf8 (uni_locase_all(s));
   else s= uni_locase_all(s);
 
@@ -245,8 +252,8 @@ get_hyphens (string s,
       for (i=0, l=0;
           i<maxi;
           goto_next_char (s, i, utf8), l++) {
+          list<array<int>> r= patterns [sub_str (s, i, len, utf8)];
           // list<array<int>> r= patterns [sub_str (s, i, len, utf8)];
-          list<array<int>> r= patterns ["blah"];
           if (!(r[0][0] == -1)) {
            // cout << "  " << sub_str (s, i, len, utf8) << " => " << r << "\n";
            for (j=0; j<N(r); j++) {
@@ -266,12 +273,12 @@ get_hyphens (string s,
     }
 
     array<int> penalty (N(T)-4);
-    for (i=2; i < N(T)-4; i++)
+    for (i=2; i < N(T)-2; i++)
       penalty [i-2]= (((T[i]&1)==1)? HYPH_STD: HYPH_INVALID);
     if (N(penalty)>0) penalty[0] = penalty[N(penalty)-1] = HYPH_INVALID;
-    if (N(penalty)>1) penalty[1] = penalty[N(penalty)-2] = HYPH_INVALID;
-    if (N(penalty)>2) penalty[N(penalty)-3] = HYPH_INVALID;
-    // cout << s << " --> " << penalty << "\n";
+    // if (N(penalty)>1) penalty[1] = penalty[N(penalty)-2] = HYPH_INVALID;
+    // if (N(penalty)>2) penalty[N(penalty)-3] = HYPH_INVALID;
+    //cout << s << " --> " << penalty << "\n";
     return penalty;
   }
 }
