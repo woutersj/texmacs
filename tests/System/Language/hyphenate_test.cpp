@@ -29,7 +29,6 @@ my_goto_next_char (string s, int &i, bool utf8) {
 
 void
 test_hyphens (language lan, string s, string t) {
-  // cout << s << "  " << t << LF;
   array<int> penalty;
   penalty = lan->get_hyphens (s);
   string h = "";
@@ -42,17 +41,15 @@ test_hyphens (language lan, string s, string t) {
       h << "-";
     }
   }
-  // cout << h << LF;
+  if (!(h ==t)) cout << "Expected: " << t << "; got: " << h << LF;
   EXPECT_EQ (h, t);
 }
 
 TEST (text_language, get_hyphens) {
-  // Test basic patterns
-  // Test words
-  // Test predefined hyphenations
+  // TODO: add tests for predefined hyphenations
   language lan;
   lan = text_language ("russian");
-  int repeats = 1000;
+  int repeats = 1;
   for (int k=0;k<repeats;k++){
   test_hyphens (lan,utf8_to_cork("Нет"), utf8_to_cork("Нет"));
   test_hyphens (lan,utf8_to_cork("пять"), utf8_to_cork("пять"));
@@ -87,4 +84,17 @@ TEST (text_language, get_hyphens) {
   test_hyphens (lan,string("supercalifragilisticexpialidocious"),
                 string("su-per-cal-ifrag-ilis-tic-ex-pi-ali-do-cious"));
   }
+          
+  lan = text_language ("french");
+  for (int k=0;k<repeats;k++){
+    test_hyphens (lan,string("mâcher"), string("mâ-cher"));
+    test_hyphens (lan,string("léguer"), string("lé-guer"));
+  }
+  
+  
+  lan = text_language ("chinese");
+  for (int k=0;k<repeats;k++){
+    test_hyphens (lan,utf8_to_cork("汉语族为分析语的一支家族"), utf8_to_cork("汉语族为分析语的一支家族"));
+  }
+  
 }
