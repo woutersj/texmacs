@@ -72,9 +72,7 @@ hyphen_normalize (string s) {
 }
 
 list<array<int>>
-// void
 hyphen_to_array (string s){
-  // cout << "s: " << s << "\n";
   list<array<int>> h;
   int i, j;
   for (i=0,j=0; i<N(s); j++,goto_next_char(s,i,false)) {
@@ -85,7 +83,6 @@ hyphen_to_array (string s){
       h << p;
     }
   }
-  // cout << "h: " << h << "\n";
   return h;
 }
 
@@ -259,15 +256,6 @@ get_hyphens (string s,
            for (j=0; j<N(r); j++) {
              if (r[j][1]>T[l+r[j][0]]) T[l+r[j][0]]=r[j][1];
            }
-
-    //     //   for (j=0, k=0; j<=len; j++, goto_next_char (r, k, utf8)) {
-    //     //     if (k<N(r) && is_digit (r[k])) {
-    //     //       m= ((int) r[k])-((int) '0');
-    //     //       goto_next_char (r, k, utf8);
-    //     //     }
-    //     //     else m=0;
-    //     //     if (m>T[l+j]) T[l+j]=m;
-    //     //   }
         }
       }
     }
