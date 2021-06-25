@@ -1036,7 +1036,7 @@ qt_ui_element_rep::as_qwidget () {
 
       QTMLineEdit* lineEdit = new QTMLineEdit (0, "string", "1w");
       QObject::connect (lineEdit, SIGNAL (textChanged (const QString&)),
-                        choiceWidget->filter(), SLOT (setFilterRegExp (const QString&)));
+                        choiceWidget->filter(), SLOT (filterRegularExpression (const QString&)));
       lineEdit->setText (to_qstring (filter));
       lineEdit->setFocusPolicy (Qt::StrongFocus);
 
