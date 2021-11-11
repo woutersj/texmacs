@@ -126,12 +126,12 @@
           ("Prompt on scripts" "prompt on scripts")
           ("Accept all scripts" "accept all scripts"))
     (-> "Converters"
-        (-> "TeXmacs -> Html"
+        (-> "TeXmacs → Html"
 ;           (toggle ("Use CSS" "texmacs->html:css"))
             (toggle ("Use MathJax" "texmacs->html:mathjax"))
             (toggle ("Use MathML" "texmacs->html:mathml"))
             (toggle ("Export formulas as images" "texmacs->html:images")))
-        (-> "LaTeX -> TeXmacs"
+        (-> "LaTeX → TeXmacs"
             (toggle ("Import sophisticated objects as pictures"
                      "latex->texmacs:fallback-on-pictures"))
             ---
@@ -142,7 +142,7 @@
             (when (== (get-preference "latex->texmacs:source-tracking") "on")
               (toggle ("Guarantee transparent source tracking"
                        "latex->texmacs:transparent-source-tracking"))))
-        (-> "TeXmacs -> LaTeX"
+        (-> "TeXmacs → LaTeX"
             (toggle ("Replace unrecognized styles"
                      "texmacs->latex:replace-style"))
             (toggle ("Expand unrecognized macros"
@@ -167,7 +167,7 @@
                        "texmacs->latex:transparent-source-tracking"))
               (toggle ("Store tracking information in LaTeX files"
                        "texmacs->latex:attach-tracking-info"))))
-        (-> "TeXmacs -> Verbatim"
+        (-> "TeXmacs → Verbatim"
             (toggle ("Wrap lines"
                      "texmacs->verbatim:wrap"))
             (enum ("Encoding" "texmacs->verbatim:encoding")
@@ -175,7 +175,7 @@
                   ("Cork" "cork")
                   ("Iso-8859-1" "iso-8859-1")
                   ("Utf-8" "utf-8")))
-        (-> "Verbatim -> TeXmacs"
+        (-> "Verbatim → TeXmacs"
             (toggle ("Wrap lines"
                      "verbatim->texmacs:wrap"))
             (enum ("Encoding" "verbatim->texmacs:encoding")
@@ -183,13 +183,13 @@
                   ("Cork" "cork")
                   ("Iso-8859-1" "iso-8859-1")
                   ("Utf-8" "utf-8")))
-        (-> "TeXmacs -> Image"
+        (-> "TeXmacs → Image"
             (enum ("Format" "texmacs->graphics:format")
                   ("Svg" "svg")
                   ("Eps" "eps")
                   ("Png" "png")))
         (when (and (supports-native-pdf?) (supports-ghostscript?))
-          (-> "TeXmacs -> Pdf/Postscript"
+          (-> "TeXmacs → Pdf/Postscript"
               (toggle ("Produce native Pdf" "native pdf"))
               (toggle ("Produce native Postscript" "native postscript"))
               (toggle ("Expand beamer slides" "texmacs->pdf:expand slides"))
