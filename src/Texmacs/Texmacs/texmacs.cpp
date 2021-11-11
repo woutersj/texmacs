@@ -88,7 +88,7 @@ test_routines () {
 * Clean exit on segmentation faults
 ******************************************************************************/
 
-void 
+void
 clean_exit_on_segfault (int sig_num) {
   (void) sig_num;
   FAILED ("segmentation fault");
@@ -112,15 +112,15 @@ TeXmacs_init_paths (int& argc, char** argv) {
 
   string current_texmacs_path = get_env ("TEXMACS_PATH");
 
-#ifdef Q_OS_MAC 
+#ifdef Q_OS_MAC
   // the following line can inibith external plugin loading
   // QCoreApplication::setLibraryPaths(QStringList());
   // ideally we would like to control the external plugins
   // and add the most useful (gif, jpeg, svg converters)
   // to the bundle package. I still do not have a reliable solution
   // so just allow everything that is reachable.
-        
-  // plugins need to be installed in TeXmacs.app/Contents/Plugins        
+
+  // plugins need to be installed in TeXmacs.app/Contents/Plugins
   QCoreApplication::addLibraryPath( QDir::cleanPath(QCoreApplication::applicationDirPath().append("/../Plugins")) );
   // cout << from_qstring ( QCoreApplication::libraryPaths () .join("\n") ) << LF;
   {
@@ -130,11 +130,11 @@ TeXmacs_init_paths (int& argc, char** argv) {
     // other instances of the Qt libraries
     string buf;
     buf = as_string(exedir * "../Frameworks");
-    if (get_env("DYLD_FRAMEWORK_PATH") != "") buf = buf * ":" * get_env("DYLD_FRAMEWORK_PATH");    
-    set_env ("DYLD_FRAMEWORK_PATH", buf);    
+    if (get_env("DYLD_FRAMEWORK_PATH") != "") buf = buf * ":" * get_env("DYLD_FRAMEWORK_PATH");
+    set_env ("DYLD_FRAMEWORK_PATH", buf);
     buf = as_string(exedir * "../Resources/lib");
-    if (get_env("DYLD_LIBRARY_PATH") != "") buf = buf * ":" * get_env("DYLD_LIBRARY_PATH");    
-    set_env ("DYLD_LIBRARY_PATH", buf);    
+    if (get_env("DYLD_LIBRARY_PATH") != "") buf = buf * ":" * get_env("DYLD_LIBRARY_PATH");
+    set_env ("DYLD_LIBRARY_PATH", buf);
   }
 #endif
 
@@ -163,13 +163,13 @@ TeXmacs_init_paths (int& argc, char** argv) {
   // HOME is set to USERPROFILE
   // PWD is set to HOME
   // if PWD is lacking, then the path resolution machinery may not work
-  
+
   if (is_empty (current_texmacs_path))
     set_env ("TEXMACS_PATH", as_string (exedir * ".."));
   // if (get_env ("HOME") == "") //now set in immediate_options otherwise --setup option fails
   //   set_env ("HOME", get_env("USERPROFILE"));
   // HACK
-  // In WINE the variable PWD is already in the outer Unix environment 
+  // In WINE the variable PWD is already in the outer Unix environment
   // so we need to override it to have a correct behaviour
   if ((get_env ("PWD") == "") || (get_env ("PWD")[0] == '/'))  {
     set_env ("PWD", as_string (exedir));
@@ -443,7 +443,7 @@ TeXmacs_main (int argc, char** argv) {
   init_plugins ();
   bench_cumul ("initialize plugins");
   if (DEBUG_STD) debug_boot << "Opening display...\n";
-  
+
 #if defined(X11TEXMACS) && defined(MACOSX_EXTENSIONS)
  // init_mac_application ();
 #endif
@@ -453,7 +453,7 @@ TeXmacs_main (int argc, char** argv) {
   if (DEBUG_STD) debug_boot << "Starting server...\n";
   { // opening scope for server sv
   server sv;
-    
+
   string where= "";
   for (i=1; i<argc; i++) {
     if (argv[i] == NULL) break;
@@ -519,11 +519,11 @@ TeXmacs_main (int argc, char** argv) {
 
   if (DEBUG_STD) debug_boot << "Closing display...\n";
   gui_close ();
-  
+
 #if defined(X11TEXMACS) && defined(MACOSX_EXTENSIONS)
   finalize_mac_application ();
 #endif
-  
+
   if (DEBUG_STD) debug_boot << "Good bye...\n";
 }
 
@@ -679,18 +679,18 @@ main (int argc, char** argv) {
 #ifndef OS_MINGW
   set_env ("LC_NUMERIC", "POSIX");
 #ifndef OS_MACOS
-  set_env ("QT_QPA_PLATFORM", "xcb");
-  set_env ("XDG_SESSION_TYPE", "x11");
+  //set_env ("QT_QPA_PLATFORM", "xcb");
+  //set_env ("XDG_SESSION_TYPE", "x11");
 #endif
 #endif
 #ifdef MACOSX_EXTENSIONS
   // Reset TeXmacs if Alt is pressed during startup
   if (mac_alternate_startup()) {
-    cout << "TeXmacs] Performing setup (Alt on startup)" << LF; 
+    cout << "TeXmacs] Performing setup (Alt on startup)" << LF;
     remove (url ("$TEXMACS_HOME_PATH/system/settings.scm"));
     remove (url ("$TEXMACS_HOME_PATH/system/setup.scm"));
     remove (url ("$TEXMACS_HOME_PATH/system/cache") * url_wildcard ("*"));
-    remove (url ("$TEXMACS_HOME_PATH/fonts/error") * url_wildcard ("*"));    
+    remove (url ("$TEXMACS_HOME_PATH/fonts/error") * url_wildcard ("*"));
   }
 #endif
 #ifdef QTTEXMACS
