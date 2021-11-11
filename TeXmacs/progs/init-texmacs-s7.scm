@@ -29,7 +29,7 @@
   (define primitive-load load)
   (define primitive-eval eval)
   (define primitive-catch catch)
-  
+
   (varlet (rootlet) 'tm-eval (lambda (obj) (eval obj *texmacs-user-module*)))
   (set! load (lambda (file . env) (primitive-load file (if (null? env) *current-module* (car env)))))
   (set! eval (lambda (obj . env)
@@ -37,7 +37,7 @@
     ;;(format #t "Eval: ~A -> ~A\n" obj res)
     res)
     ))
-    
+
   (set! catch (lambda ( key cl hdl )
     (primitive-catch key cl
       (lambda args
@@ -45,14 +45,14 @@
   )
 
 
-(let ()
-  (display "Benchmark 1\n")
-  (define start (texmacs-time))
-  (define (fib n) (if (< n 2) n (+ (fib (- n 1)) (fib (- n 2)))))
-  (display (fib 30))
-  (newline)
-  (display "Time: ") (display (- (texmacs-time) start)) (newline)
-)
+;;(let ()
+;;  (display "Benchmark 1\n")
+;;  (define start (texmacs-time))
+;;  (define (fib n) (if (< n 2) n (+ (fib (- n 1)) (fib (- n 2)))))
+;;  (display (fib 30))
+;;  (newline)
+;;  (display "Time: ") (display (- (texmacs-time) start)) (newline)
+;;)
 
 (define developer-mode? #f)
 (define boot-start (texmacs-time))
@@ -459,7 +459,7 @@
 ;;(display* "memory: " (texmacs-memory) " bytes\n")
 
 ;;(display "Booting autoupdater\n")
-(when (updater-supported?) 
+(when (updater-supported?)
   (use-modules (utils misc updater))
   (delayed (:idle 2000) (updater-initialize)))
 (display* "time: " (- (texmacs-time) boot-start) "\n")
@@ -470,16 +470,16 @@
 (texmacs-banner)
 (display "Initialization done\n")
 
-(let ()
-  (display "------------------------------------------------------\n")
-  (display "Benchmark 2\n")
-  (define start (texmacs-time))
-  (tm-define (tm-fib n) (if (< n 2) n (+ (tm-fib (- n 1)) (tm-fib (- n 2)))))
-  (display (tm-fib 30))
-  (newline)
-  (display "Time: ") (display (- (texmacs-time) start)) (newline)
-  (display "------------------------------------------------------\n")
-)
+;;(let ()
+;;  (display "------------------------------------------------------\n")
+;;  (display "Benchmark 2\n")
+;;  (define start (texmacs-time))
+;;  (tm-define (tm-fib n) (if (< n 2) n (+ (tm-fib (- n 1)) (tm-fib (- n 2)))))
+;;  (display (tm-fib 30))
+;;  (newline)
+;;  (display "Time: ") (display (- (texmacs-time) start)) (newline)
+;;  (display "------------------------------------------------------\n")
+;;)
 
 (display "------------------------------------------------------\n")
 (display "Forcing delayed loads\n")
@@ -501,7 +501,7 @@
   (display "------------------------------------------------------\n")
 )
 
-(delayed (:idle 1000) (benchmark-menu-expand))
+;;(delayed (:idle 1000) (benchmark-menu-expand))
 
 ;; you can run
 ;;   texmacs.bin -x "(benchmark-manual)"
@@ -528,4 +528,3 @@
                   (display "Timing:") (display (- (texmacs-time) start-time)) (newline)
                   ;(quit-TeXmacs)
                   ))))))))))))
-
