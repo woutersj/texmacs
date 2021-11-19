@@ -79,15 +79,21 @@ option (QTPIPES "use Qt pipes" ON)
 
 option (USE_SQLITE3 "Use SQLite3" ON)
 if (USE_SQLITE3)
-  find_package (SQLite3)
+  find_package (SQLite3 REQUIRED)
   option (LINKED_SQLITE3 "Use Linked SQLite3" ON)
 endif (USE_SQLITE3)
 
 option (USE_FREETYPE "use Freetype" ON)
 if (USE_FREETYPE)
-  find_package (Freetype)
+  find_package (Freetype REQUIRED)
   option (LINKED_FREETYPE "linked Freetype" ON)
 endif (USE_FREETYPE)
+
+option (USE_FONTCONFIG "use Fontconfig" ON)
+if (USE_FONTCONFIG)
+  find_package (Fontconfig REQUIRED)
+  option (LINKED_FONTCONFIG "linked Freetype" ON)
+endif (USE_FONTCONFIG)
 
 option (USE_CAIRO "use Cairo" OFF)
 if (USE_CAIRO)
@@ -454,7 +460,7 @@ endif (WIN32)
 
 set (TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs}
   ${Guile_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${Cairo_INCLUDE_DIRS}
-  ${IMLIB2_INCLUDE_DIR} ${GMP_INCLUDES}
+  ${IMLIB2_INCLUDE_DIR} ${GMP_INCLUDES} ${Fontconfig_INCLUDE_DIRS}
 )
 
 ### --------------------------------------------------------------------
@@ -567,6 +573,10 @@ endif (LINKED_SQLITE3)
 if (LINKED_FREETYPE)
   set (TeXmacs_Libraries ${TeXmacs_Libraries} ${FREETYPE_LIBRARIES})
 endif (LINKED_FREETYPE)
+
+if (LINKED_FONTCONFIG)
+  set (TeXmacs_Libraries ${TeXmacs_Libraries} ${Fontconfig_LIBRARIES})
+endif (LINKED_FONTCONFIG)
 
 
 ### --------------------------------------------------------------------
