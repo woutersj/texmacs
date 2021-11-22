@@ -39,6 +39,6 @@ addons:
       - cmake-data
 
 script:
-  - cmake --version
-  - cmake CMakeLists.txt
+  - mkdir build && cd build
+  - cmake .. -DTEXMACS_GUI=Qt5
   - cmake  --build .
