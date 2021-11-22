@@ -47,12 +47,13 @@ test_hyphens (language lan, string s, string t) {
 class TestHyphens: public QObject {
   Q_OBJECT
 
-private slots:
+private:
   void equality ();
 };
 
 void
 TestHyphens::equality()
+{
   // TODO: add tests for predefined hyphenations
   language lan;
   lan = text_language ("russian");
