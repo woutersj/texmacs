@@ -8,6 +8,8 @@
 * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ******************************************************************************/
 
+// This test needs to read hyphenation files, run with TEXMACS_PATH correctly set
+
 #include <QtTest/QtTest>
 #include "edit_typeset.hpp"
 #include "converter.hpp"
@@ -26,8 +28,18 @@ my_goto_next_char (string s, int &i, bool utf8) {
   }
 }
 
+class TestHyphens: public QObject {
+  Q_OBJECT
+
+private:
+  void test_hyphens(language lan, string s, string t);
+
+private slots:
+  void equality ();
+};
+
 void
-test_hyphens (language lan, string s, string t) {
+TestHyphens::test_hyphens (language lan, string s, string t) {
   array<int> penalty;
   penalty = lan->get_hyphens (s);
   string h = "";
@@ -43,13 +55,6 @@ test_hyphens (language lan, string s, string t) {
   if (!(h ==t)) cout << "Expected: " << t << "; got: " << h << LF;
   QCOMPARE (h, t);
 }
-
-class TestHyphens: public QObject {
-  Q_OBJECT
-
-private:
-  void equality ();
-};
 
 void
 TestHyphens::equality()
