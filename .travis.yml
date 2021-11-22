@@ -4,8 +4,11 @@ dist: focal
 compiler: gcc
 os:
 - linux
+- osx
 
-
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update	                     ; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install freetype libjpeg qt@5; fi
 
 install:
   - wget http://ftp.gnu.org/gnu/guile/guile-1.8.8.tar.gz
