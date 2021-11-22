@@ -1,10 +1,19 @@
 language: cpp
 sudo: required
-dist: focal
+#dist: focal
 compiler: gcc
-os:
-- linux
-- osx
+#os:
+#- linux
+#- osx
+
+jobs:
+  include:
+    - 
+      os: linux
+      dist: focal
+    - 
+      os: osx
+      osx_image: xcode13.1
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update	                     ; fi
