@@ -8,8 +8,7 @@
 * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ******************************************************************************/
 
-#include "gtest/gtest.h"
-
+#include <QtTest/QtTest>
 #include "edit_typeset.hpp"
 #include "converter.hpp"
 
@@ -42,10 +41,18 @@ test_hyphens (language lan, string s, string t) {
     }
   }
   if (!(h ==t)) cout << "Expected: " << t << "; got: " << h << LF;
-  EXPECT_EQ (h, t);
+  QCOMPARE (h, t);
 }
 
-TEST (text_language, get_hyphens) {
+class TestHyphens: public QObject {
+  Q_OBJECT
+
+private slots:
+  void equality ();
+};
+
+void
+TestHyphens::equality()
   // TODO: add tests for predefined hyphenations
   language lan;
   lan = text_language ("russian");
@@ -59,14 +66,14 @@ TEST (text_language, get_hyphens) {
   test_hyphens (lan,utf8_to_cork("прямые"), utf8_to_cork("пря-мые"));
   test_hyphens (lan,utf8_to_cork("параллельного"), utf8_to_cork("па-рал-лель-но-го"));
   test_hyphens (lan,utf8_to_cork("наложены"), utf8_to_cork("на-ло-же-ны"));
-  
+
   test_hyphens (lan,utf8_to_cork("проведена"), utf8_to_cork("про-ве-де-на"));
   test_hyphens (lan,utf8_to_cork("реконструкции"), utf8_to_cork("ре-кон-струк-ции"));
   test_hyphens (lan,utf8_to_cork("известными"), utf8_to_cork("из-вест-ны-ми"));
   test_hyphens (lan,utf8_to_cork("согласно"), utf8_to_cork("со-глас-но"));
   test_hyphens (lan,utf8_to_cork("семиугольных"), utf8_to_cork("се-ми-уголь-ных"));
   }
-  
+
   lan = text_language ("english");
   for (int k=0;k<repeats;k++){
   test_hyphens (lan,string("baby"), string("baby"));
@@ -84,17 +91,19 @@ TEST (text_language, get_hyphens) {
   test_hyphens (lan,string("supercalifragilisticexpialidocious"),
                 string("su-per-cal-ifrag-ilis-tic-ex-pi-ali-do-cious"));
   }
-          
+
   lan = text_language ("french");
   for (int k=0;k<repeats;k++){
     test_hyphens (lan,string("mâcher"), string("mâ-cher"));
     test_hyphens (lan,string("léguer"), string("lé-guer"));
   }
-  
-  
+
   lan = text_language ("chinese");
   for (int k=0;k<repeats;k++){
     test_hyphens (lan,utf8_to_cork("汉语族为分析语的一支家族"), utf8_to_cork("汉语族为分析语的一支家族"));
   }
-  
+
 }
+
+QTEST_MAIN(TestHyphens)
+#include "hyphenate_test.moc"
