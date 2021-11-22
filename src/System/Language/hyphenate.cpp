@@ -95,9 +95,9 @@ load_hyphen_tables (string file_name,
   load_string (url ("$TEXMACS_PATH/langs/natural/hyphen", file_name), s, true);
   if (DEBUG_VERBOSE)
     debug_automatic << "TeXmacs] Loading " << file_name << "\n";
-
+  
   if (toCork) s= utf8_to_cork (s);
-
+  
   hashmap<string,string> H ("?");
   bool pattern_flag=false;
   bool hyphenation_flag=false;
@@ -142,19 +142,20 @@ sub_str (string s, int i, int len, bool utf8) {
   // i: start (index is encoding-dependent, i.e. it is not a number of characters)
   // len: length in characters (encoding-independent)
   int j=i, k=0;
-  for (k = 0; k < len; k++)
-    goto_next_char (s, j, utf8);
+  for (k = 0; k < len; k++) {
+      goto_next_char (s, j, utf8);
+  }
   return s (i, j);
 }
 
 int
 str_ind (string s, int ind, bool utf8) {
   int i=0, k;
-  for (k=0; k<ind; k++)
-    goto_next_char (s, i, utf8);
+  for (k=0; k<ind; k++) {
+      goto_next_char (s, i, utf8);
+  }
   return i;
 }
-
 
 int
 str_length (string s, bool utf8) {
@@ -175,17 +176,17 @@ get_hyphens (string s,
              hashmap<string,list<array<int>>> patterns,
              hashmap<string,string> hyphenations, bool utf8) {
   ASSERT (N(s) != 0, "hyphenation of empty string");
-
+  
   if (str_length(s, utf8) < 5)  {
     // cout << str_length(s, utf8) << LF;
     array<int> penalty (str_length(s, utf8)-1);
     for (int i=0; i < str_length(s, utf8)-1; i++) penalty [i] = HYPH_INVALID;
     return penalty;
   }
-
+  
   if (utf8) s= cork_to_utf8 (uni_locase_all(s));
   else s= uni_locase_all(s);
-
+  
   if (hyphenations->contains (s)) {
     string h= hyphenations [s];
     array<int> penalty (str_length (s, utf8)-1);
@@ -204,39 +205,6 @@ get_hyphens (string s,
     //cout << s << " --> " << penalty << "\n";
     return penalty;
   }
-  else if (utf8) {
-    s= "." * s * ".";
-    // cout << s << "\n";
-    int i, j, k, l, m, len, slen= str_length (s, utf8);
-    array<int> T (slen+1);
-    for (i=0; i<N(T); i++) T[i]=0;
-    for (len=1; len < MAX_SEARCH; len++)
-      for (i=0, l=0;
-          i<str_ind (s, slen-len+1, utf8);
-          goto_next_char (s, i, utf8), l++) {
-        string r= patterns [sub_str (s, i, len, utf8)];
-        if (!(r == "?")) {
-          // cout << "  " << sub_str (s, i, len, utf8) << " => " << r << "\n";
-          for (j=0, k=0; j<=len; j++, goto_next_char (r, k, utf8)) {
-            if (k<N(r) && is_digit (r[k])) {
-              m= ((int) r[k])-((int) '0');
-              goto_next_char (r, k, utf8);
-            }
-            else m=0;
-            if (m>T[l+j]) T[l+j]=m;
-          }
-        }
-      }
-
-    array<int> penalty (N(T)-4);
-    for (i=2; i < N(T)-4; i++)
-      penalty [i-2]= (((T[i]&1)==1)? HYPH_STD: HYPH_INVALID);
-    if (N(penalty)>0) penalty[0] = penalty[N(penalty)-1] = HYPH_INVALID;
-    if (N(penalty)>1) penalty[1] = penalty[N(penalty)-2] = HYPH_INVALID;
-    if (N(penalty)>2) penalty[N(penalty)-3] = HYPH_INVALID;
-    // cout << s << " --> " << penalty << "\n";
-    return penalty;
-  }
   else {
     s= "." * s * ".";
     // cout << s << "\n";
@@ -245,7 +213,7 @@ get_hyphens (string s,
     array<int> T (slen+1);
     for (i=0; i<N(T); i++) T[i]=0;
     for (len=1; len < MAX_SEARCH; len++) {
-      int maxi = str_ind (s, slen-len+1, utf8);
+      int maxi = str_ind (s, slen-len+1, utf8); 
       for (i=0, l=0;
           i<maxi;
           goto_next_char (s, i, utf8), l++) {
@@ -259,7 +227,8 @@ get_hyphens (string s,
         }
       }
     }
-
+    // cout << "T: " << T << LF;
+  
     array<int> penalty (N(T)-4);
     for (i=2; i < N(T)-2; i++)
       penalty [i-2]= (((T[i]&1)==1)? HYPH_STD: HYPH_INVALID);
