@@ -193,7 +193,11 @@
 (tm-define (output-text . ss)
   ;;(display-err* "Output text " ss "\n")
   (let ((s (apply string-append (cons output-tail ss))))
-    (output-sub s 0)))
+    (with pos (string-contains s "\n")
+    (if pos 
+      (begin (output-text (substring s 0 pos)) (output-flush) (output-return)
+      (output-text (substring s (+ pos 1))))
+      (output-sub s 0)))))
 
 (tm-define (output-marker s)
   ;;(display-err* "Output marker " s "\n")
