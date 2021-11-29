@@ -976,8 +976,9 @@ resolve_in_path (url u) {
       return which;
     else if ((which != "") &&
              (!starts (which, "which: ")) &&
-             (!starts (which, "no ")))
-      cout << "TeXmacs] " << which << "\n";
+             (!starts (which, "no ")) &&
+             (DEBUG_VERBOSE))
+      debug_io << "TeXmacs] " << which << "\n";
   }
 #ifdef OS_MINGW
   return resolve ((url_path ("$TEXMACS_PATH/bin") | url_path ("$PATH")) * u, "x");
