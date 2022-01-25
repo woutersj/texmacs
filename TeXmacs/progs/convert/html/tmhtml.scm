@@ -37,6 +37,7 @@
 (define tmhtml-image-root-url (unix->url "image"))
 (define tmhtml-image-root-string "image")
 (define tmhtml-site-version #f)
+(define tmhtml-footnotes '())
 
 (tm-define (tmhtml-initialize opts)
   (set! tmhtml-env (make-ahash-table))
@@ -160,14 +161,14 @@
 	  ".compact-block p { margin-top: 0px; margin-bottom: 0px } "
 	  ".left-tab { text-align: left } "
 	  ".center-tab { text-align: center } "
-          ".balloon-anchor { border-bottom: 1px dotted #000000; outline: none;"
+    ".balloon-anchor { border-bottom: 1px dotted #000000; outline: none;"
           " cursor: help; position: relative; } "
-          ".balloon-anchor [hidden] { margin-left: -999em; position: absolute;"
-	  " display: none; } "
-          ".balloon-anchor: hover [hidden] { position: absolute; left: 1em;"
-	  " top: 2em; z-index: 99; margin-left: 0;"
-	  " width: 500px; display: inline-block; } "
-          ".balloon-body { } "
+    ".balloon-anchor .balloon-body { visibility: hidden; width: 120px;"
+        "background-color: #555; color: #fff; text-align: center; border-radius: 6px;"
+        "padding: 5px 0; position: absolute; z-index: 1; bottom: 125%;"
+        "left: 50%; margin-left: -60px; opacity: 0; transition: opacity 0.3s;}"
+      ".balloon-anchor:hover .balloon-body {"
+        "visibility: visible; opacity: 1; }"
 	  ".ornament { border-width: 1px; border-style: solid;"
 	  " border-color: black; display: inline-block; padding: 0.2em; } "
 	  ".right-tab { float: right; position: relative; top: -1em; } "
@@ -272,6 +273,7 @@
             (in? "mmxdoc" styles) (in? "magix-web" styles)
             (in? "max-web" styles))
 	(set! body (tmhtml-tmdoc-post body)))
+  (set! body (append body tmhtml-footnotes))
     (if tmhtml-css?
         (set! body (tmhtml-css-post body)))
     `(h:html
@@ -686,7 +688,9 @@
   (let* ((type (tmhtml-force-string (car l)))
          (cl (if (== type "") "unknown-float" type))
          (r (tmhtml (cAr l))))
-    `((div (@ (class ,cl)) ,@r))))
+      (if (== type "footnote")
+          (begin (set! tmhtml-footnotes (append tmhtml-footnotes r)) `())
+          `((div (@ (class ,cl)) ,@r)))))
 
 (define (tmhtml-repeat l)
   (tmhtml (car l)))
@@ -1060,6 +1064,11 @@
   ;; WARNING: bad conversion if ID is not a string.
   `((h:a (@ (id ,(cork->html (force-string (car l))))))))
 
+(define (tmhtml-hidden-binding l)
+   (let ((x (cdr (car l))))
+     (if (null? x) `() (tmhtml-label x)))
+    )
+
 ;(define (tmhtml-reference l)
 ;  (list 'ref (cork->html (force-string (car l)))))
 
@@ -1429,7 +1438,7 @@
          (tag1 (if (stm-block-structure? (car  l)) 'h:div 'h:span))
          (tag2 (if (stm-block-structure? (cadr l)) 'h:div 'h:span)))
     `((,tag1 (@ (class "balloon-anchor")) ,@anch
-             (,tag2 (@ (class "balloon-body") (hidden "hidden")) ,@body)))))
+             (,tag2 (@ (class "balloon-body")) ,@body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Standard markup
@@ -1961,6 +1970,7 @@
 
   (locus tmhtml-datoms)
   (label tmhtml-label)
+  (hidden-binding tmhtml-hidden-binding)
   (reference tmhtml-noop)
   (pageref tmhtml-noop)
   (hlink tmhtml-hyperlink)
@@ -2126,6 +2136,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (tm-define (texmacs->html x opts)
+  (set! tmhtml-footnotes `())
   (if (tmfile? x)
       (let* ((body (tmfile-extract x 'body))
 	     (style* (tmfile-extract x 'style))
