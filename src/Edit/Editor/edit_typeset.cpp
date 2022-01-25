@@ -767,6 +767,8 @@ edit_typeset_rep::exec_html (tree t, path p) {
     w << string ("html-head-favicon") << H["html-head-favicon"];
   if (H->contains ("html-extra-css"))
     w << string ("html-extra-css") << H["html-extra-css"];
+  if (H->contains ("html-extra-css-rules"))
+      w << string ("html-extra-css-rules") << H["html-extra-css-rules"];
   if (H->contains ("html-extra-javascript-src"))
     w << string ("html-extra-javascript-src")
       << H["html-extra-javascript-src"];
