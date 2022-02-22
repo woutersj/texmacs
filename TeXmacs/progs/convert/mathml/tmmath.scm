@@ -133,6 +133,11 @@
 
 (define (tmmath-frac l)
   `(m:mfrac ,(tmmath (car l)) ,(tmmath (cadr l))))
+  
+(define (tmmath-choose l)
+    `(m:mrow (m:mo "(")
+      (m:mfrac (@ (linethickness "0")) ,(tmmath (car l)) ,(tmmath (cadr l)))
+      (m:mo ")")))
 
 (define (tmmath-sqrt l)
   (if (null? (cdr l))
@@ -346,6 +351,8 @@
   (rsup! tmmath-rsup!)
   (rsubsup! tmmath-rsubsup!)
   (frac tmmath-frac)
+  (choose tmmath-choose)
+  (binom tmmath-choose)
   (sqrt tmmath-sqrt)
   (wide tmmath-wide)
   (wide* tmmath-wide*)
