@@ -33,6 +33,12 @@
 	 (l3 (tmconcat-structure-brackets l2)))
     (tmmath (cons 'concat! l3))))
 
+(define (tmmath-string l)
+  (cond ((== l "'") `(m:mo "&prime;"))
+        ((== l "''") `(m:mo "&Prime;"))
+        ((== l "'''") `(m:mo "&tprime;"))
+        (else (tmmath-concat (list l)))))
+
 (define (cork->utf8* x)
   (with y (cork->utf8 x)
     (if (and (== x y) (== (string-ref y 0) #\<)) "?" y)))
@@ -116,7 +122,7 @@
   (tmmath-lscript (tmmath (car l)) (tmmath (cadr l)) (tmmath (caddr l))))
 
 (define (tmmath-with-limits? x)
-  (and (func? x 'big)
+  (and (or (func? x 'big) (func? x 'wide) (func? x 'wide*)) (not (member (cadr x) '("int" "iint" "iiint" "idotsint" "oint" "oiint")))
        (== (ahash-ref tmmath-env "math-display") "true")))
 
 (define (tmmath-rsub! l)
@@ -269,7 +275,7 @@
 	  ((== x '("math-font-series" "medium")) (list 'mathvariant "normal"))
 	  ((== x '("math-font-series" "bold")) (list 'mathvariant "bold"))
 	  ((== x '("math-font-series" "bold")) (list 'mathvariant "bold"))
-	  ((== var "math-level") (list 'scriptlevel val))
+	  ;((== var "math-level") (list 'scriptlevel val))
 	  ((== var "math-display") (list 'displaystyle val))
 	  (else #f))))
 
@@ -290,6 +296,12 @@
 	 (body (tmmath-with-sub attrs-1 (cAr l))))
     (if (null? attrs-3) body
 	`(m:mstyle (@ ,@attrs-3) ,body))))
+
+  (define (tmmath-space l)
+  (with len (tmlength->htmllength (if (list-1? l) (car l) (cadr l)) #t)
+    (if (not len) '()
+    `(m:mspace (@ (width ,len))))
+    ))
 
 (define (tmmath-text x)
   ;; we protect via non-breaking spaces the initial and final whitespaces 
@@ -316,7 +328,7 @@
       (cond ((string? x) (tmmath-text x))
             ((== (car x) 'with) (tmmath-with (cdr x)))
             (else `(m:mrow ,@(map tmmath (cdr x)))))
-      (cond ((string? x) (tmmath-concat (list x)))
+      (cond ((string? x) (tmmath-string x))
             (else (or (tmmath-dispatch 'tmmath-primitives% x) "")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -376,7 +388,8 @@
   (surround tmmath-surround)
   (move tmmath-first)
   (resize tmmath-first)
-  (with tmmath-with))
+  (with tmmath-with)
+  (space tmmath-space))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interface

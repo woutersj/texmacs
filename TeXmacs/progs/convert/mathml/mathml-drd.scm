@@ -21,7 +21,7 @@
   ("<mathcatalan>" "C")
   ("<mathe>" "e")
   ("<matheuler>" "&eulergamma;")
-  ("<mathi>" "&ImaginaryI;")
+  ("<mathi>" (m:mi (@ (mathvariant "normal")) "i"))
   ("<mathpi>" "&pi;"))
 
 (logic-table mathml-constant->tm%
@@ -102,6 +102,8 @@
   ("sum" "&Sum;")
   ("prod" "&Product;")
   ("int" "&Integral;")
+  ("iint" "&Int;")
+  ("iiint" "&iiint;")
   ("oint" "&ContourIntegral;")
   ("amalg" "&Coproduct;")
   ("cap" "&Intersection;")

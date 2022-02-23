@@ -872,7 +872,7 @@
 			       (= x (exact->inexact (inexact->exact x))))
 			  (inexact->exact x) x))))
 
-(define (tmlength->htmllength len . css?)
+(tm-define (tmlength->htmllength len . css?)
   (if (list>0? css?) (set! css? (car css?)) (set! css? #t))
   (and-let* ((s (tmhtml-force-string len))
              (len-str (if (string->number s) (string-append s "tmpt") s))
