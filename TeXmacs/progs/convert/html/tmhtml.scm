@@ -172,7 +172,7 @@
 	  " border-color: black; display: inline-block; padding: 0.2em; } "
 	  ".right-tab { float: right; position: relative; top: -1em; } "
 	  ".no-breaks { white-space: nowrap; } "))
-	(mathml "math { font-family: cmr, times, verdana } "))
+	(mathml "math { font-family: Latin Modern Math, cmr, times, verdana } "))
     (if tmhtml-mathml? (string-append html mathml) html)))
 
 (define (with-extract-sub w var post)
