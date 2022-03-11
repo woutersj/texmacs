@@ -47,6 +47,7 @@
   (if (string? x)
       (with type (math-symbol-type x)
 	(cond ((string-number? x) `(m:mn ,x))
+        ((== "<space>" x) `(m:mspace (@ (width "0.1666667em"))))
 	      ((logic-ref tm->mathml-constant% x) => (lambda (y) `(m:mn ,y)))
 	      ((logic-ref tm->mathml-operator% x) => (lambda (y) `(m:mo ,y)))
               ((and (string-starts? x "<up-") (== (string-length x) 6))
@@ -122,19 +123,22 @@
   (tmmath-lscript (tmmath (car l)) (tmmath (cadr l)) (tmmath (caddr l))))
 
 (define (tmmath-with-limits? x)
-  (and (or (func? x 'big) (func? x 'wide) (func? x 'wide*)) (not (member (cadr x) '("int" "iint" "iiint" "idotsint" "oint" "oiint")))
+  (and (func? x 'big) (not (member (cadr x) '("int" "iint" "iiint" "idotsint" "oint" "oiint")))
        (== (ahash-ref tmmath-env "math-display") "true")))
+       
+(define (tmmath-wide? x)
+    (or (func? x 'wide) (func? x 'wide*)))
 
 (define (tmmath-rsub! l)
-  (with op (if (tmmath-with-limits? (car l)) 'm:munder 'm:msub)
+  (with op (if (or (tmmath-with-limits? (car l)) (tmmath-wide? (car l))) 'm:munder 'm:msub)
     (list op (tmmath (car l)) (tmmath (cadr l)))))
 
 (define (tmmath-rsup! l)
-  (with op (if (tmmath-with-limits? (car l)) 'm:mover 'm:msup)
+  (with op (if (or (tmmath-with-limits? (car l)) (tmmath-wide? (car l))) 'm:mover 'm:msup)
     (list op (tmmath (car l)) (tmmath (cadr l)))))
 
 (define (tmmath-rsubsup! l)
-  (with op (if (tmmath-with-limits? (car l)) 'm:munderover 'm:msubsup)
+  (with op (if (or (tmmath-with-limits? (car l)) (tmmath-wide? (car l))) 'm:munderover 'm:msubsup)
     (list op (tmmath (car l)) (tmmath (cadr l)) (tmmath (caddr l)))))
 
 (define (tmmath-frac l)
