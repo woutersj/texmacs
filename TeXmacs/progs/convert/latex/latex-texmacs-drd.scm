@@ -65,6 +65,7 @@
   ;; negations
   nin nni notni nequiv nleadsto
   npreccurlyeq npreceqq nprecsim
+  nsimeq nsubset nsqsubset nsqsubseteq nsqsubseteqq
   nsqsupset nsqsupseteq nsqsupseteqq
   nsucccurlyeq nsucceqq nsuccsim  
   
