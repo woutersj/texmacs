@@ -274,10 +274,15 @@
          (r (substring s (string-get-indent s) (string-length s))))
     (string-append l r)))
 
+(tm-define (program-get-row-indent row)
+      (:synopsis "get the indentation of the line @row")
+      (and (inside-program?)
+           (string-get-indent (program-row row))))
+
 (tm-define (program-get-indent)
   (:synopsis "get the indentation of the current line")
   (and (inside-program?)
-       (string-get-indent (program-row (program-row-number)))))
+       (program-get-row-indent (program-row-number))))
 
 (tm-define (program-set-indent i)
   (:synopsis "set the indentation of the current line to @i spaces")
@@ -289,13 +294,31 @@
 (tm-define (program-compute-indentation doc row col)
   0)
 
+(define (program-get-unindent row i)
+(let ((j (program-get-row-indent row)))
+  (if (< j i)
+    j
+    (program-get-unindent (- row 1) i))
+))
+
 (tm-define (program-indent-line doc row unindent?)
   ; TODO: implement unindent for general languages
-  (let* ((i (program-compute-indentation doc row -1))
+  (if unindent? 
+    (let* ((r (program-row row))
+          (r (if r r ""))
+           ;;(s (string-trim-right (strip-comment-buggy (if r r ""))))
+          (i (string-get-indent r))
+          (j (program-get-unindent row (program-get-row-indent row)))
+          (t (tree-ref doc row)))
+          (display* "unindent from " i " to " j "\n")
+          (tree-set t (string-set-indent (tree->string t) j))
+          j)
+    (let* ((i (program-compute-indentation doc row -1))
          (t (tree-ref doc row)))
     ; HACK: I should change program-set-indent to accept line numbers
+    (display* "i: " i " unindent?: " unindent? "\n")
     (tree-set t (string-set-indent (tree->string t) i))
-    i))
+    i)))
 
 (tm-define (program-indent-all unindent?)
   (:synopsis "indent a whole program")
