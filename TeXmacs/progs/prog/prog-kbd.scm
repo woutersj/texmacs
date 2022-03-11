@@ -21,7 +21,8 @@
         (prog scala-edit)
         (prog cpp-edit)
         (prog python-edit)
-        (prog fortran-edit)))
+        (prog fortran-edit)
+        (prog julia-edit)))
 
 (kbd-map
   (:mode in-prog?)
@@ -107,3 +108,15 @@
   ("]" (fortran-bracket-close "[" "]" ))
   ("\"" (fortran-bracket-open "\"" "\"" ))
   ("'" (fortran-bracket-open "'" "'" )))
+
+(kbd-map
+    (:mode in-prog-julia?)
+    ("e n d" (julia-unindent-end))
+    ("{" (julia-bracket-open "{" "}" ))
+    ("}" (julia-bracket-close "{" "}" ))
+    ("(" (julia-bracket-open "(" ")" ))
+    (")" (julia-bracket-close "(" ")" ))
+    ("[" (julia-bracket-open "[" "]" ))
+    ("]" (julia-bracket-close "[" "]" ))
+    ("\"" (julia-bracket-open "\"" "\"" ))
+    ("'" (julia-bracket-open "'" "'" )))
