@@ -197,11 +197,15 @@
 ;; Text at 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define (inside-text-context? t)
+  (if (in-active-graphics?) 
+    (inside-graphical-text-context? t)
+    t))
+
 (tm-define (kbd-horizontal t forwards?)
   (:require (graphical-text-context? t))
   (with-define (move) ((if forwards? go-right go-left))
-    (with-define (next) (go-to-next-inside move inside-graphics-context?)
-      (go-to-next-such-that next inside-graphical-text-context?))))
+    (go-to-next-inside move inside-text-context?)))
 
 (tm-define (kbd-vertical t downwards?)
   (:require (graphical-text-context? t))
