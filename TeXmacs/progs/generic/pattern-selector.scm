@@ -21,6 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (encode-pattern-name u)
+  (display* u)
   (let* ((name (if (string? u) u (url->unix u)))
          (t (url->unix (url-tail u)))
          (p (url->unix "$TEXMACS_PATH/misc/patterns"))
@@ -38,6 +39,7 @@
           (else u))))
 
 (define (decode-pattern-name s)
+(display* s)
   (let* ((name (unix->url s))
          (base1 "$TEXMACS_PATH/misc/patterns/neutral-pattern.png")
          (base2 "$TEXMACS_PATH/misc/pictures/gradients/vertical-white-black.png")
@@ -196,6 +198,7 @@
 
 (tm-widget (pattern-name-selector)
   (let* ((name (unix->url (get-name)))
+        ;; curr is unix->url for a rooted filename
          (curr (decode-pattern-name (get-name)))
          (setter (lambda (c)
                    (when (and (pair? c) (url? (car c)))
